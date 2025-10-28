@@ -2,6 +2,8 @@
 
 A simple yet powerful orchestration system purpose-built for the **OpenAI Codex CLI**. It uses specialized Codex agents to manage complex projects from start to finish, with mandatory human oversight and visual testing.
 
+Original orchestrator by [Income Stream Surfer](https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v2) for Claude Code CLI.
+
 ## 🎯 What Is This?
 
 This is a **custom orchestration system** that transforms how you build software projects with the OpenAI Codex CLI. The master Codex orchestrator manages the big picture while delegating individual tasks to specialized subagents:
@@ -270,10 +272,8 @@ MIT - Use it, modify it, share it!
 
 ## 🙏 Credits
 
-Built by [Income Stream Surfer](https://www.youtube.com/incomestreamsurfers)
+Original orchestrator by [Income Stream Surfer](https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v2)
 
 Powered by the OpenAI Codex CLI and Playwright MCP.
 
 ---
-
-**Ready to build something amazing?** Run `codex` in this directory and tell it what you want to create! 🚀
