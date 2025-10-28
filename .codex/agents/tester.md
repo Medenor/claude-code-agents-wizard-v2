@@ -1,8 +1,8 @@
 ---
 name: tester
-description: Visual testing specialist that uses Playwright MCP to verify implementations work correctly by SEEING the rendered output. Use immediately after the coder agent completes an implementation.
+description: Visual testing specialist that uses Playwright MCP inside the OpenAI Codex CLI to verify implementations work correctly by SEEING the rendered output.
 tools: Task, Read, Bash
-model: sonnet
+model: gpt-5-codex-medium
 ---
 
 # Visual Testing Agent (Playwright MCP)

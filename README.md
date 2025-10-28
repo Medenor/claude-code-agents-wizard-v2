@@ -1,12 +1,12 @@
-# Claude Code Agent Orchestration System v2 🚀
+# OpenAI Codex Agent Orchestration System v2 🚀
 
-A simple yet powerful orchestration system for Claude Code that uses specialized agents to manage complex projects from start to finish, with mandatory human oversight and visual testing.
+A simple yet powerful orchestration system purpose-built for the **OpenAI Codex CLI**. It uses specialized Codex agents to manage complex projects from start to finish, with mandatory human oversight and visual testing.
 
 ## 🎯 What Is This?
 
-This is a **custom Claude Code orchestration system** that transforms how you build software projects. Claude Code itself acts as the orchestrator with its 200k context window, managing the big picture while delegating individual tasks to specialized subagents:
+This is a **custom orchestration system** that transforms how you build software projects with the OpenAI Codex CLI. The master Codex orchestrator manages the big picture while delegating individual tasks to specialized subagents:
 
-- **🧠 Claude (You)** - The orchestrator with 200k context managing todos and the big picture
+- **🧠 Codex Orchestrator (You)** - The large-context master coordinator managing todos and the big picture
 - **✍️ Coder Subagent** - Implements one todo at a time in its own clean context
 - **👁️ Tester Subagent** - Verifies implementations using Playwright in its own context
 - **🆘 Stuck Subagent** - Human escalation point when ANY problem occurs
@@ -16,14 +16,14 @@ This is a **custom Claude Code orchestration system** that transforms how you bu
 - **No Fallbacks**: When ANY agent hits a problem, you get asked - no assumptions, no workarounds
 - **Visual Testing**: Playwright MCP integration for screenshot-based verification
 - **Todo Tracking**: Always see exactly where your project stands
-- **Simple Flow**: Claude creates todos → delegates to coder → tester verifies → repeat
+- **Simple Flow**: The orchestrator creates todos → delegates to coder → tester verifies → repeat
 - **Human Control**: The stuck agent ensures you're always in the loop
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-1. **Claude Code CLI** installed ([get it here](https://docs.claude.com/en/docs/claude-code))
+1. **OpenAI Codex CLI** installed ([instructions](https://platform.openai.com/docs/guides/devtools))
 2. **Node.js** (for Playwright MCP)
 
 ### Installation
@@ -33,23 +33,23 @@ This is a **custom Claude Code orchestration system** that transforms how you bu
 git clone https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v2.git
 cd claude-code-agents-wizard-v2
 
-# Start Claude Code in this directory
-claude
+# Start the agent system in this directory using the Codex CLI
+codex
 ```
 
-That's it! The agents are automatically loaded from the `.claude/` directory.
+That's it! The Codex CLI automatically loads the orchestration instructions from the `.codex/` directory.
 
 ## 📖 How to Use
 
 ### Starting a Project
 
-When you want to build something, just tell Claude your requirements:
+When you want to build something, just tell the Codex orchestrator your requirements:
 
 ```
 You: "Build a todo app with React and TypeScript"
 ```
 
-Claude will automatically:
+The orchestrator will automatically:
 1. Create a detailed todo list using TodoWrite
 2. Delegate the first todo to the **coder** subagent
 3. The coder implements in its own clean context window
@@ -63,9 +63,9 @@ Claude will automatically:
 ```
 USER: "Build X"
     ↓
-CLAUDE: Creates detailed todos with TodoWrite
+ORCHESTRATOR: Creates detailed todos with TodoWrite
     ↓
-CLAUDE: Invokes coder subagent for todo #1
+ORCHESTRATOR: Invokes coder subagent for todo #1
     ↓
 CODER (own context): Implements feature
     ↓
@@ -73,7 +73,7 @@ CODER (own context): Implements feature
     ↓
 CODER: Reports completion
     ↓
-CLAUDE: Invokes tester subagent
+ORCHESTRATOR: Invokes tester subagent
     ↓
 TESTER (own context): Playwright screenshots & verification
     ↓
@@ -81,15 +81,15 @@ TESTER (own context): Playwright screenshots & verification
     ↓
 TESTER: Reports success
     ↓
-CLAUDE: Marks todo complete, moves to next
+ORCHESTRATOR: Marks todo complete, moves to next
     ↓
 Repeat until all todos done ✅
 ```
 
 ## 🛠️ How It Works
 
-### Claude (The Orchestrator)
-**Your 200k Context Window**
+### Codex Orchestrator
+**Your expansive context window (gpt-5-codex-high)**
 
 - Creates and maintains comprehensive todo lists
 - Sees the complete project from A-Z
@@ -97,7 +97,7 @@ Repeat until all todos done ✅
 - Tracks overall progress across all tasks
 - Maintains project state and context
 
-**How it works**: Claude IS the orchestrator - it uses its 200k context to manage everything
+**How it works**: The Codex orchestrator uses its large context window to manage everything and delegates coding and verification to subagents running `gpt-5-codex-medium`.
 
 ### Coder Subagent
 **Fresh Context Per Task**
@@ -106,9 +106,9 @@ Repeat until all todos done ✅
 - Works in its own clean context window
 - Writes clean, functional code
 - **Never uses fallbacks** - invokes stuck agent immediately
-- Reports completion back to Claude
+- Reports completion back to the orchestrator
 
-**When it's used**: Claude delegates each coding todo to this subagent
+**When it's used**: The orchestrator delegates each coding todo to this subagent
 
 ### Tester Subagent
 **Fresh Context Per Verification**
@@ -119,9 +119,9 @@ Repeat until all todos done ✅
 - Takes screenshots to verify layouts
 - Tests interactions (clicks, forms, navigation)
 - **Never marks failing tests as passing**
-- Reports pass/fail back to Claude
+- Reports pass/fail back to the orchestrator
 
-**When it's used**: Claude delegates testing after every implementation
+**When it's used**: The orchestrator delegates testing after every implementation
 
 ### Stuck Subagent
 **Fresh Context Per Problem**
@@ -150,28 +150,28 @@ Every agent is **hardwired** to invoke the stuck agent rather than use fallbacks
 ```
 You: "Build a landing page with a contact form"
 
-Claude creates todos:
+The orchestrator creates todos:
   [ ] Set up HTML structure
   [ ] Create hero section
   [ ] Add contact form with validation
   [ ] Style with CSS
   [ ] Test form submission
 
-Claude invokes coder(todo #1: "Set up HTML structure")
+The orchestrator invokes coder(todo #1: "Set up HTML structure")
 
 Coder (own context): Creates index.html
-Coder: Reports completion to Claude
+Coder: Reports completion to the orchestrator
 
-Claude invokes tester("Verify HTML structure loads")
+The orchestrator invokes tester("Verify HTML structure loads")
 
 Tester (own context): Uses Playwright to navigate
 Tester: Takes screenshot
 Tester: Verifies HTML structure visible
-Tester: Reports success to Claude
+Tester: Reports success to the orchestrator
 
-Claude: Marks todo #1 complete ✓
+The orchestrator: Marks todo #1 complete ✓
 
-Claude invokes coder(todo #2: "Create hero section")
+The orchestrator invokes coder(todo #2: "Create hero section")
 
 Coder (own context): Implements hero section
 Coder: ERROR - image file not found
@@ -188,7 +188,7 @@ You choose: "Download from Unsplash"
 
 Stuck: Returns your decision to coder
 Coder: Proceeds with Unsplash download
-Coder: Reports completion to Claude
+Coder: Reports completion to the orchestrator
 
 ... and so on until all todos done
 ```
@@ -197,12 +197,12 @@ Coder: Reports completion to Claude
 
 ```
 .
-├── .claude/
-│   ├── CLAUDE.md              # Orchestration instructions for main Claude
+├── .codex/
+│   ├── CODEX.md               # Master orchestrator instructions for the Codex CLI
 │   └── agents/
-│       ├── coder.md          # Coder subagent definition
-│       ├── tester.md         # Tester subagent definition
-│       └── stuck.md          # Stuck subagent definition
+│       ├── coder.md          # Codex coder subagent definition
+│       ├── tester.md         # Codex tester subagent definition
+│       └── stuck.md          # Codex stuck subagent definition
 ├── .mcp.json                  # Playwright MCP configuration
 ├── .gitignore
 └── README.md
@@ -233,16 +233,16 @@ This is an open system! Feel free to:
 
 ## 📝 How It Works Under the Hood
 
-This system leverages Claude Code's [subagent system](https://docs.claude.com/en/docs/claude-code/sub-agents):
+This system leverages the subagent capabilities available in the OpenAI Codex CLI:
 
-1. **CLAUDE.md** instructs main Claude to be the orchestrator
-2. **Subagents** are defined in `.claude/agents/*.md` files
+1. **CODEX.md** instructs the Codex CLI orchestrator (running `gpt-5-codex-high`)
+2. **Subagents** are defined in `.codex/agents/*.md` and run on `gpt-5-codex-medium`
 3. **Each subagent** gets its own fresh context window
-4. **Main Claude** maintains the 200k context with todos and project state
+4. **Main orchestrator** maintains the large-context workspace with todos and project state
 5. **Playwright MCP** is configured in `.mcp.json` for visual testing
 
 The magic happens because:
-- **Claude (200k context)** = Maintains big picture, manages todos
+- **Codex orchestrator (large context)** = Maintains big picture, manages todos
 - **Coder (fresh context)** = Implements one task at a time
 - **Tester (fresh context)** = Verifies one implementation at a time
 - **Stuck (fresh context)** = Handles one problem at a time with human input
@@ -250,7 +250,7 @@ The magic happens because:
 
 ## 🎯 Best Practices
 
-1. **Trust Claude** - Let it create and manage the todo list
+1. **Trust the Codex orchestrator** - Let it create and manage the todo list
 2. **Review screenshots** - The tester provides visual proof of every implementation
 3. **Make decisions when asked** - The stuck agent needs your guidance
 4. **Don't interrupt the flow** - Let subagents complete their work
@@ -258,8 +258,8 @@ The magic happens because:
 
 ## 🔥 Pro Tips
 
-- Use `/agents` command to see all available subagents
-- Claude maintains the todo list in its 200k context - check anytime
+- Use `agents` in the Codex CLI to see all available subagents
+- The orchestrator maintains the todo list in its large context - check anytime
 - Screenshots from tester are saved and can be reviewed
 - Each subagent has specific tools - check their `.md` files
 - Subagents get fresh contexts - no context pollution!
@@ -272,8 +272,8 @@ MIT - Use it, modify it, share it!
 
 Built by [Income Stream Surfer](https://www.youtube.com/incomestreamsurfers)
 
-Powered by Claude Code's agent system and Playwright MCP.
+Powered by the OpenAI Codex CLI and Playwright MCP.
 
 ---
 
-**Ready to build something amazing?** Just run `claude` in this directory and tell it what you want to create! 🚀
+**Ready to build something amazing?** Run `codex` in this directory and tell it what you want to create! 🚀
