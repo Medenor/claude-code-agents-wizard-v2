@@ -1,4 +1,4 @@
-# OpenAI Codex Agent Orchestration System v2 🚀
+# OpenAI Codex Agent Orchestration System v1 🚀
 
 A simple yet powerful orchestration system purpose-built for the **OpenAI Codex CLI**. It uses specialized Codex agents to manage complex projects from start to finish, with mandatory human oversight and visual testing.
 
@@ -32,8 +32,8 @@ This is a **custom orchestration system** that transforms how you build software
 
 ```bash
 # Clone this repository
-git clone https://github.com/IncomeStreamSurfer/claude-code-agents-wizard-v2.git
-cd claude-code-agents-wizard-v2
+git clone https://github.com/Medenor/codex-cli-agents-wizard-v1.git
+cd codex-cli-agents-wizard-v1
 
 # Start the agent system in this directory using the Codex CLI
 codex
