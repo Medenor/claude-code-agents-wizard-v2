@@ -216,22 +216,6 @@ You choose "Download from Unsplash" in the stuck template, return the decision, 
 │   └── run_workflow_simulation.py        # Generate simulated workflow logs
 └── README.md
 ```
-
-## 🎓 Learn More
-
-### Resources
-
-- **[SEO Grove](https://seogrove.ai)** - AI-powered SEO automation platform
-- **[ISS AI Automation School](https://www.skool.com/iss-ai-automation-school-6342/about)** - Join our community to learn AI automation
-- **[Income Stream Surfers YouTube](https://www.youtube.com/incomestreamsurfers)** - Tutorials, breakdowns, and AI automation content
-
-### Support
-
-Have questions or want to share what you built?
-- Join the [ISS AI Automation School community](https://www.skool.com/iss-ai-automation-school-6342/about)
-- Subscribe to [Income Stream Surfers on YouTube](https://www.youtube.com/incomestreamsurfers)
-- Check out [SEO Grove](https://seogrove.ai) for automated SEO solutions
-
 ## 🤝 Contributing
 
 This is an open system! Feel free to:
