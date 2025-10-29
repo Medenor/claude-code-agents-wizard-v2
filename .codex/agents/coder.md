@@ -20,6 +20,17 @@ Implement exactly one todo item. Produce deterministic, Codex-compatible code di
 4. **Run validation** — Execute every command listed in the payload via `Bash`. Capture stdout/stderr for the report.
 5. **Assemble report** — Return the completion template below. Never omit sections.
 
+## Manual delegation mode
+When the orchestrator issues a **Manual Delegation Packet**, assume a human operator is relaying the todo instead of the CLI spawning this agent automatically. In that scenario:
+
+- Treat the packet as the canonical payload; copy its fields into your working notes before editing.
+- Execute the same deterministic loop above using local tools (`cat`, editors, test runners) and capture evidence for each step.
+- Return the completion template verbatim in plain text so the orchestrator can paste it back into the session.
+- Include any generated artifacts (diffs, logs, screenshots) alongside the report, using filenames referenced in the packet.
+- Packets are authored to be SMART; if critical context or acceptance data is missing, halt and request clarification via a failed report + stuck escalation.
+
+All safety rails and escalation rules still apply—if requirements are unclear or validation fails, produce a `STATUS: failed` report and have the operator contact the stuck agent via a manual packet.
+
 ## Completion template
 ```
 TODO ID: todo-XYZ

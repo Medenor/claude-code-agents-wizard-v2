@@ -6,11 +6,11 @@ Original orchestrator by [Income Stream Surfer](https://github.com/IncomeStreamS
 
 ## 🎯 What Is This?
 
-This is a **custom orchestration system** that transforms how you build software projects with the OpenAI Codex CLI. The master Codex orchestrator manages the big picture while delegating individual tasks to specialized subagents:
+This is a **custom orchestration system** that transforms how you build software projects with the OpenAI Codex CLI. The master Codex orchestrator manages the big picture and emits structured instructions so humans (or future automation) can act as specialized subagents:
 
 - **🧠 Codex Orchestrator (You)** - The large-context master coordinator managing todos and the big picture
-- **✍️ Coder Subagent** - Implements one todo at a time in its own clean context
-- **👁️ Tester Subagent** - Verifies implementations using Playwright in its own context
+- **✍️ Coder Subagent** - Implements one todo at a time following manual delegation packets
+- **👁️ Tester Subagent** - Verifies implementations using Playwright or a browser, guided by manual packets
 - **🆘 Stuck Subagent** - Human escalation point when ANY problem occurs
 
 ## ⚡ Key Features
@@ -18,7 +18,7 @@ This is a **custom orchestration system** that transforms how you build software
 - **No Fallbacks**: When ANY agent hits a problem, you get asked - no assumptions, no workarounds
 - **Visual Testing**: Playwright MCP integration for screenshot-based verification
 - **Todo Tracking**: Always see exactly where your project stands
-- **Simple Flow**: The orchestrator creates todos → delegates to coder → tester verifies → repeat
+- **Manual Friendly Flow**: The orchestrator creates todos → emits Manual Delegation Packets → humans execute coder/tester/stuck instructions → repeat
 - **Human Control**: The stuck agent ensures you're always in the loop
 
 ## 🚀 Quick Start
@@ -51,14 +51,14 @@ When you want to build something, just tell the Codex orchestrator your requirem
 You: "Build a todo app with React and TypeScript"
 ```
 
-The orchestrator will automatically:
-1. Create a detailed todo list using TodoWrite
-2. Delegate the first todo to the **coder** subagent
-3. The coder implements in its own clean context window
-4. Delegate verification to the **tester** subagent (Playwright screenshots)
-5. If ANY problem occurs, the **stuck** subagent asks you what to do
-6. Mark todo complete and move to the next one
-7. Repeat until project complete
+The orchestrator will:
+1. Create a detailed todo list using TodoWrite.
+2. Emit a **Manual Delegation Packet** for the first todo targeting the CODER role.
+3. You (or another human) open `.codex/agents/coder.md`, follow the instructions, and return the completion template.
+4. Paste the coder’s response back into the orchestrator turn.
+5. The orchestrator records the evidence and emits the next packet—usually for the TESTER role.
+6. Repeat the manual handoff cycle until the todo is closed, then advance to the next item.
+7. Invoke the STUCK agent via manual packet whenever clarification or human decisions are required.
 
 ### The Workflow
 
@@ -67,26 +67,36 @@ USER: "Build X"
     ↓
 ORCHESTRATOR: Creates detailed todos with TodoWrite
     ↓
-ORCHESTRATOR: Invokes coder subagent for todo #1
+ORCHESTRATOR: Emits Manual Delegation Packet → CODER
     ↓
-CODER (own context): Implements feature
+HUMAN CODER: Follows `.codex/agents/coder.md`, implements feature, returns report
     ↓
-    ├─→ Problem? → Invokes STUCK → You decide → Continue
+    ├─→ Problem? → Orchestrator emits STUCK packet → Human decision → Continue
     ↓
-CODER: Reports completion
+ORCHESTRATOR: Logs coder report, updates evidence
     ↓
-ORCHESTRATOR: Invokes tester subagent
+ORCHESTRATOR: Emits Manual Delegation Packet → TESTER
     ↓
-TESTER (own context): Playwright screenshots & verification
+HUMAN TESTER: Performs verification, captures screenshots/logs, returns report
     ↓
-    ├─→ Test fails? → Invokes STUCK → You decide → Continue
-    ↓
-TESTER: Reports success
+    ├─→ Test fails? → Orchestrator emits STUCK packet → Human decision → Continue
     ↓
 ORCHESTRATOR: Marks todo complete, moves to next
     ↓
 Repeat until all todos done ✅
 ```
+
+### Manual Delegation Packets
+
+Every packet you copy from the orchestrator should remain SMART so the acting agent has the right amount of context without overflowing their prompt:
+
+- **Specific** — include the objective, relevant background, and file paths the agent cannot infer.
+- **Measurable** — list acceptance criteria, commands to run, or artifacts (diffs, screenshots, logs) required for completion.
+- **Achievable** — scope each packet to a single todo that can be finished in one focused turn.
+- **Relevant** — tie the work back to the current project milestone and mention upstream dependencies or decisions.
+- **Time-bound** — reference the todo deadline or add a short note when urgency matters.
+
+Keep packets concise but complete; link to prior evidence or decisions via filenames rather than repeating long transcripts.
 
 ## 🛠️ How It Works
 
@@ -95,15 +105,16 @@ Repeat until all todos done ✅
 
 - Creates and maintains comprehensive todo lists
 - Sees the complete project from A-Z
-- Delegates individual todos to specialized subagents
+- Produces Manual Delegation Packets for specialized roles
 - Tracks overall progress across all tasks
 - Maintains project state and context
 
-**How it works**: The Codex orchestrator uses its large context window to manage everything and delegates coding and verification to subagents running `gpt-5-codex-medium`.
+**How it works**: The Codex orchestrator uses its large context window to manage everything, then shares manual packets so humans (or future automated subagents) can perform coding, testing, and escalation steps in smaller contexts.
 
 ### Coder Subagent
 **Fresh Context Per Task**
 
+- **Manual mode today**: A human follows the packet plus `.codex/agents/coder.md`.
 - Gets invoked with ONE specific todo item
 - Works in its own clean context window
 - Writes clean, functional code
@@ -115,6 +126,7 @@ Repeat until all todos done ✅
 ### Tester Subagent
 **Fresh Context Per Verification**
 
+- **Manual mode today**: A human runs the verification and captures evidence.
 - Gets invoked after each coder completion
 - Works in its own clean context window
 - Uses **Playwright MCP** to see rendered output
@@ -128,6 +140,7 @@ Repeat until all todos done ✅
 ### Stuck Subagent
 **Fresh Context Per Problem**
 
+- **Manual mode today**: A human relays questions and decisions using the packet template.
 - Gets invoked when coder or tester hits a problem
 - Works in its own clean context window
 - **ONLY subagent** that can ask you questions
@@ -159,40 +172,25 @@ The orchestrator creates todos:
   [ ] Style with CSS
   [ ] Test form submission
 
-The orchestrator invokes coder(todo #1: "Set up HTML structure")
+The orchestrator emits Manual Delegation Packet → CODER(todo #1: "Set up HTML structure")
 
-Coder (own context): Creates index.html
-Coder: Reports completion to the orchestrator
+You copy the packet, open `.codex/agents/coder.md`, create `index.html`, and return the completion template.
 
-The orchestrator invokes tester("Verify HTML structure loads")
+The orchestrator logs the report, then emits Manual Delegation Packet → TESTER("Verify HTML structure loads")
 
-Tester (own context): Uses Playwright to navigate
-Tester: Takes screenshot
-Tester: Verifies HTML structure visible
-Tester: Reports success to the orchestrator
+You (or a teammate) follow `.codex/agents/tester.md`, capture screenshots, and return the verification template.
 
-The orchestrator: Marks todo #1 complete ✓
+The orchestrator marks todo #1 complete ✓
 
-The orchestrator invokes coder(todo #2: "Create hero section")
+Next, the orchestrator emits Manual Delegation Packet → CODER(todo #2: "Create hero section")
 
-Coder (own context): Implements hero section
-Coder: ERROR - image file not found
-Coder: Invokes stuck subagent
+While implementing, you notice `hero.jpg` is missing. Report `STATUS: failed` and request a STUCK packet.
 
-Stuck (own context): Asks YOU:
-  "Hero image 'hero.jpg' not found. How to proceed?"
-  Options:
-  - Use placeholder image
-  - Download from Unsplash
-  - Skip image for now
+The orchestrator emits Manual Delegation Packet → STUCK describing the missing asset.
 
-You choose: "Download from Unsplash"
+You choose "Download from Unsplash" in the stuck template, return the decision, and resume coding.
 
-Stuck: Returns your decision to coder
-Coder: Proceeds with Unsplash download
-Coder: Reports completion to the orchestrator
-
-... and so on until all todos done
+... repeat the manual loop until every todo is done.
 ```
 
 ## 📁 Repository Structure
@@ -205,8 +203,17 @@ Coder: Reports completion to the orchestrator
 │       ├── coder.md          # Codex coder subagent definition
 │       ├── tester.md         # Codex tester subagent definition
 │       └── stuck.md          # Codex stuck subagent definition
+├── codex-cli-orchestrator-limitations.md  # Notes on current CLI constraints
+├── docs/
+│   ├── dry-run-smart-todo.md             # SMART todo dry-run walkthrough
+│   └── manual-delegation-sample.md       # End-to-end manual delegation example
 ├── .mcp.json                  # Playwright MCP configuration
 ├── .gitignore
+├── orchestration-architecture.md         # High-level architecture reference
+├── scripts/
+│   ├── compare_workflows.py              # Baseline vs. live workflow diff
+│   ├── ingest_codex_jsonl.py             # Normalize Codex JSONL traces
+│   └── run_workflow_simulation.py        # Generate simulated workflow logs
 └── README.md
 ```
 
@@ -235,20 +242,20 @@ This is an open system! Feel free to:
 
 ## 📝 How It Works Under the Hood
 
-This system leverages the subagent capabilities available in the OpenAI Codex CLI:
+This system is architected for automated subagents but currently operates in **manual delegation mode** inside the OpenAI Codex CLI:
 
-1. **CODEX.md** instructs the Codex CLI orchestrator (running `gpt-5-codex-high`)
-2. **Subagents** are defined in `.codex/agents/*.md` and run on `gpt-5-codex-medium`
-3. **Each subagent** gets its own fresh context window
-4. **Main orchestrator** maintains the large-context workspace with todos and project state
-5. **Playwright MCP** is configured in `.mcp.json` for visual testing
+1. **CODEX.md** instructs the Codex CLI orchestrator (running `gpt-5-codex-high`) and defines the Manual Delegation Packet format.
+2. **Subagent guides** in `.codex/agents/*.md` describe how humans should execute CODER, TESTER, and STUCK responsibilities.
+3. **Manual Delegation Packets** are copied into the session so humans can perform each role deterministically and return structured reports.
+4. **Main orchestrator** maintains the large-context workspace with todos and project state, updating evidence as packets are fulfilled.
+5. **Playwright MCP** (optional) remains available in `.mcp.json` for testers who want automated browser support.
 
 The magic happens because:
-- **Codex orchestrator (large context)** = Maintains big picture, manages todos
-- **Coder (fresh context)** = Implements one task at a time
-- **Tester (fresh context)** = Verifies one implementation at a time
-- **Stuck (fresh context)** = Handles one problem at a time with human input
-- **Each subagent** has specific tools and hardwired escalation rules
+- **Codex orchestrator (large context)** = Maintains big picture, manages todos, issues packets
+- **Coder role** = Implements one task per packet with clear acceptance criteria
+- **Tester role** = Verifies one implementation at a time and supplies artifacts
+- **Stuck role** = Handles one problem at a time with human decisions
+- **Each role** adheres to deterministic templates, ensuring the orchestrator can stitch results back together
 
 ## 🎯 Best Practices
 

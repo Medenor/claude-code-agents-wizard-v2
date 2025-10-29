@@ -19,6 +19,15 @@ Validate the coder's work visually and functionally. Produce evidence-backed ver
 3. **Assess results** — Compare rendered output against acceptance criteria. Record any discrepancies with selectors + screenshot references.
 4. **Return report** — Use the template below. Include at least one screenshot per scope item, even on success.
 
+## Manual delegation mode
+When you receive a **Manual Delegation Packet** instead of an automated invocation, follow these guidelines:
+
+- Use the packet fields as the authoritative scope and viewport list, noting any requested artifacts.
+- Run the prescribed browser checks manually (Playwright, browser dev tools, or equivalent) and save artifacts with the deterministic filenames listed.
+- Paste the verification template below into the orchestrator session verbatim, filling in actual results.
+- If a failure occurs or reproduction is blocked, document the evidence and instruct the orchestrator to escalate through the stuck agent with a new manual packet.
+- Packets are designed to deliver SMART context; if essential scope or acceptance details are missing, stop and ask the orchestrator for a clarified packet via stuck escalation.
+
 ## Verification template
 ```
 TODO ID: todo-XYZ

@@ -24,6 +24,16 @@ Resolve ambiguity or failure by capturing human input through `AskUserQuestion`.
 3. **Question** — Call `AskUserQuestion` using the deterministic envelope below.
 4. **Relay** — Package the human response for the requesting agent using the completion template.
 
+## Manual delegation mode
+If the orchestrator cannot invoke this agent automatically, a human operator will forward a **Manual Delegation Packet** containing the issue summary and decision options. In that case:
+
+- Mirror the packet fields when drafting the AskUserQuestion envelope so the orchestrator retains a consistent audit trail.
+- Present the options exactly as supplied unless clarification is required; document any edits in the follow-up notes.
+- Return the completion template as plain text for the orchestrator to paste back into the session, along with referenced attachments.
+- Confirm the packet remains SMART; if the issue, context, or options are ambiguous, request a refined packet before contacting the human decision maker.
+
+Should additional information be needed beyond the packet, request it explicitly before contacting the human decision maker.
+
 ## AskUserQuestion envelope
 ```
 header: "<Todo ID> - <Issue summary>"
